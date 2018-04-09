@@ -1,0 +1,50 @@
+apply plugin: 'java'
+apply plugin: 'eclipse-wtp'
+
+// バージョン情報は変数にしておきます
+ext {
+    springBootVersion = '2.0.0.RELEASE'
+
+    //Tthymeleaf
+    thymeleafVersion = "3.0.9.RELEASE"
+
+    // MySQL connecterVersion
+    mySQLVersion = '5.1.46'
+
+    // Jackson
+    JacksonVersion = '2.9.4'
+}
+// リポジトリの設定
+repositories {
+	jcenter()
+}
+
+ext.defaultEncoding = 'UTF-8'
+ext.artifactId = 'SpringBoot'
+version = '1.0'
+
+// Java Use Version
+sourceCompatibility = targetCompatibility = 1.8
+tasks.withType(AbstractCompile) each {
+  it.options.encoding = ext.defaultEncoding
+}
+
+// 依存関係の設定
+dependencies {
+    // SpringBoot
+    compile "org.springframework.boot:spring-boot-starter-web:$springBootVersion"
+    compile "org.springframework.boot:spring-boot-starter-test:$springBootVersion"
+    compile "org.springframework.boot:spring-boot-starter-thymeleaf:$springBootVersion"
+
+    // gradle plugin
+    compile "org.springframework.boot:spring-boot-gradle-plugin:$springBootVersion"
+
+    // Thymeleaf
+    compile "org.thymeleaf:thymeleaf-spring4:$thymeleafVersion"
+
+    // MySQL
+    compile "mysql:mysql-connector-java:$mySQLVersion"
+
+    // Jackson
+    compile "com.fasterxml.jackson.core:jackson-databind:$JacksonVersion"
+}
