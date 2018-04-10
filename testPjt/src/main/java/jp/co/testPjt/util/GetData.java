@@ -22,8 +22,9 @@ public class GetData {
 	/**
 	 * コンストラクタによって指定された取得元からデータを取得し、文字列で返す
 	 * @return data 取得したデータ
+	 * @throws Exception エラー
 	 */
-	public String GetDataString () {
+	public String GetDataString () throws Exception {
 		String data = "";
 
 		if ( type.equals("api")) {
@@ -32,8 +33,7 @@ public class GetData {
 			try {
 				data = api.conectGetJson();
 			} catch (Exception e) {
-				e.printStackTrace();
-				return "error";
+	        	throw e;
 			}
 		}
 		return data;

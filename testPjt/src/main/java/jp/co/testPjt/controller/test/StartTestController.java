@@ -1,5 +1,6 @@
 package jp.co.testPjt.controller.test;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import jp.co.testPjt.form.IssuesForm;
+import jp.co.testPjt.setting.Setting;
 import jp.co.testPjt.util.GetData;
 import jp.co.testPjt.util.Output;
 import jp.co.testPjt.util.ParseJson;
@@ -35,15 +37,29 @@ public class StartTestController
 
 		// データの取得
 		GetData data = new GetData("api");
-		String strData = data.GetDataString();
-		if ( "error".equals(strData) || strData.isEmpty()) {
+		String strData;
+		try {
+			strData = data.GetDataString();
+		} catch (Exception e) {
+			model.addAttribute("e", e);
+			return "error";
+		}
+		if ( strData.isEmpty()) {
+			model.addAttribute("e", "取得結果が空です");
 			return "error";
 		}
 
 		// データの加工
 		ParseJson parseJson = new ParseJson();
-		List<HashMap<String, String>> listData = parseJson.parseJsonToList(strData);
+		List<HashMap<String, String>> listData = new ArrayList<HashMap<String, String>>();
+		try {
+			listData = parseJson.parseJsonToList(strData);
+		} catch (IOException e) {
+			model.addAttribute("e", e);
+			return "error";
+		}
 		if (listData.isEmpty()) {
+			model.addAttribute("e", "変換結果が空です");
 			return "error";
 		}
 
@@ -53,13 +69,26 @@ public class StartTestController
 		SubstrData substrTenLength = new SubstrData();
 		outputData = substrTenLength.substrListData(listData);
 
-		// タブ区切り
+		// 改行コードの置換
 		ParseString parseString = new ParseString();
+		outputData = parseString.parseStringNewLine(outputData);
+
+		// タブ + 改行区切り
 		outputData = parseString.parseStringTab(outputData);
 
-		// 出力
+		// 標準出力 + ファイル出力
 		Output output = new Output();
 		output.outputSystemOut(outputData);
+		try {
+			output.outputFile(outputData);
+		} catch (IOException e) {
+			model.addAttribute("e", e);
+			return "error";
+		}
+
+		// 画面への出力
+		model.addAttribute("outputDir", Setting.FILE);
+		model.addAttribute("outputDatas", outputData);
 
 		return "test/result";
 	}

@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import jp.co.testPjt.form.IssuesForm;
+import jp.co.testPjt.setting.Setting;
 
 /**
  * 渡されたデータを10文字区切りにするクラス
@@ -14,7 +15,7 @@ import jp.co.testPjt.form.IssuesForm;
 public class SubstrData {
 
 	/**
-	 * 渡されたデータからtitleとbodyのみを抜き出して文字列を抽出します
+	 * 渡されたデータからタイトルとボディのみを抜き出して文字列を抽出する
 	 * @param listData 取得したデータ
 	 * @return
 	 */
@@ -29,8 +30,8 @@ public class SubstrData {
 		for (HashMap<String, String> listData : listDatas) {
 			issues = new IssuesForm();
 
-			title = substrAssignLength(10, listData.get("title"));
-			body = substrAssignLength(30, listData.get("body"));
+			title = substrAssignLength(Setting.TITLE_LENGTH, listData.get("title"));
+			body = substrAssignLength(Setting.BODY_LENGTH, listData.get("body"));
 
 			issues.setTitle(title);
 			issues.setBody(body);

@@ -5,6 +5,15 @@
 <title>コーディングテスト</title>
 </head>
 <body>
-    テストが完了しました。
+    <p>テストが完了しました。</p>
+    <p>ファイル出力先</p>
+    <p th:text="${outputDir}">出力先</p>
+    <p>出力内容</p>
+    <table>
+        <tr th:each="outputData : ${outputDatas}" th:object="${outputData}">
+            <td th:text="*{title}">タイトル</td>
+            <td th:text="*{body}">ボディ</td>
+        </tr>
+    </table>
 </body>
 </html>

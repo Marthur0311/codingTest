@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
@@ -16,26 +14,22 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  */
 public class ParseJson {
 
+	/**
+	 * JsonデータをList<HashMap<String, String>>型にして返却
+	 * @param data Jsonデータ
+	 * @return listJson JsonデータのList<HashMap<String, String>>型
+	 * @throws Exception エラー
+	 */
 	@SuppressWarnings("unchecked")
-	public List<HashMap<String, String>> parseJsonToList ( String data) {
+	public List<HashMap<String, String>> parseJsonToList ( String data) throws IOException {
 		List<HashMap<String, String>> listJson = new ArrayList<HashMap<String, String>>();
 
 		ObjectMapper mapper = new ObjectMapper();
 
 		try {
 			listJson = mapper.readValue(data, List.class);
-		} catch (JsonParseException e) {
-			// TODO 自動生成された catch ブロック
-			e.printStackTrace();
-			return null;
-		} catch (JsonMappingException e) {
-			// TODO 自動生成された catch ブロック
-			e.printStackTrace();
-			return null;
-		} catch (IOException e) {
-			// TODO 自動生成された catch ブロック
-			e.printStackTrace();
-			return null;
+		} catch (Exception e) {
+			throw e;
 		}
 
 		return listJson;
